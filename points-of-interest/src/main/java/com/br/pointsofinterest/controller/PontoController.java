@@ -10,7 +10,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import response.Response;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -35,12 +37,12 @@ public class PontoController {
         return service.save(ponto, result);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Response<Ponto>> getById(@PathVariable String id) {
         return service.getById(UUID.fromString(id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Response<Ponto>> deleteById(@PathVariable String id) {
         return service.deleteById(UUID.fromString(id));
     }
@@ -50,4 +52,8 @@ public class PontoController {
         return service.save(ponto, result);
     }
 
+    @GetMapping(value = "/proximos")
+    public List<Ponto> getNearPoints(@RequestParam("x") Integer x, @RequestParam("y") Integer y, @RequestParam("distancia") Integer distancia) {
+        return service.getNearPoints(x, y, distancia);
+    }
 }

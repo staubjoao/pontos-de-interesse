@@ -6,11 +6,11 @@ import com.br.pointsofinterest.service.PontoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import response.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,7 +60,7 @@ public class PontoServiceImpl implements PontoService {
     public ResponseEntity<Response<Ponto>> save(Ponto ponto, BindingResult result) {
         Response<Ponto> response = new Response<Ponto>();
         response.setData(ponto);
-        if(ponto.getX() < 0 || ponto.getY() < 0){
+        if (ponto.getX() < 0 || ponto.getY() < 0) {
             response.addError("Não é aceito pontos negativos");
             return ResponseEntity.badRequest().body(response);
         }
@@ -72,10 +72,24 @@ public class PontoServiceImpl implements PontoService {
         }
         try {
             repository.save(ponto);
-        }catch (Exception e) {
+        } catch (Exception e) {
             response.addError(e.getMessage());
         }
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public List<Ponto> getNearPoints(Integer x, Integer y, Integer distancia) {
+        List<Ponto> pontosProximos = new ArrayList<>();
+        List<Ponto> todosPontos = repository.findAll();
+        for (Ponto ponto : todosPontos) {
+            Integer eq1 = x - ponto.getX();
+            Integer eq2 = y - ponto.getY();
+            if (Math.sqrt(((eq1 * eq1) + (eq2 * eq2))) <= distancia) {
+                pontosProximos.add(ponto);
+            }
+        }
+        return pontosProximos;
     }
 
 }

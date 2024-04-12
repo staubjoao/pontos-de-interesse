@@ -17,4 +17,5 @@ public interface PontoService {
     ResponseEntity<Response<Ponto>> getById(UUID id);
     ResponseEntity<Response<Ponto>> deleteById(UUID id);
     ResponseEntity<Response<Ponto>> save(@RequestBody @Valid Ponto amostraLaboratorial, BindingResult result);
+    List<Ponto> getNearPoints(Integer x, Integer y, Integer distancia);
 }
