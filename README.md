@@ -177,8 +177,3 @@ distancia | int | Distância máxima até o POI, não negativo | Sim
     }
 ]
 ```
-
-## Instalação
-Para rodar o projeto é necessário ter a JVM instalado e alguma IDE de Java (Eclipse, IntelliJ). Na IDE importe o projeto como um projeto Gradle e execute as tasks do gradle para baixar as dependências
-O projeto pode rodar com 2 bancos de dados diferentes. Por padrão ele está usando MySQL, onde as informações sobre o banco devem estar no arquivo application-prod.properties. Também é possível usar o banco H2, um banco de dados em memória que não requer instalação, para isso basta trocar o campo spring.profiles.active no arquivo application.properties de prod para test.
-O serviço é aberto em localhost:8080
