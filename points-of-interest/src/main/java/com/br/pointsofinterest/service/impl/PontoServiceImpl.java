@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import response.Response;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -60,6 +61,10 @@ public class PontoServiceImpl implements PontoService {
     public ResponseEntity<Response<Ponto>> save(Ponto ponto, BindingResult result) {
         Response<Ponto> response = new Response<Ponto>();
         response.setData(ponto);
+        if (ponto.getDescricao().length() == 0) {
+            response.addError("Não é aceito pontos com descrição vazia");
+            return ResponseEntity.badRequest().body(response);
+        }
         if (ponto.getX() < 0 || ponto.getY() < 0) {
             response.addError("Não é aceito pontos negativos");
             return ResponseEntity.badRequest().body(response);
@@ -71,11 +76,12 @@ public class PontoServiceImpl implements PontoService {
             return ResponseEntity.badRequest().body(response);
         }
         try {
-            repository.save(ponto);
+            Ponto savedPonto = repository.save(ponto);
+            return ResponseEntity.created(new URI("/pontos/" + savedPonto.getId())).body(response);
         } catch (Exception e) {
             response.addError(e.getMessage());
+            return ResponseEntity.badRequest().body(response);
         }
-        return ResponseEntity.ok(response);
     }
 
     @Override
