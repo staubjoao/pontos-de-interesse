@@ -87,7 +87,7 @@ y | int | Coordenada y do POI, não negativo | Sim
 #### Parâmetros
 Parâmetro | Tipo | Descrição | Obrigatório
 ------|------|-----------|------------
-id | UUID | Identificador do POI | Sim
+id | String(UUID) | Identificador do POI | Sim
 
 #### Exemplo
 #### Requisição
@@ -114,7 +114,7 @@ id | UUID | Identificador do POI | Sim
 #### Parâmetros
 Parâmetro | Tipo | Descrição | Obrigatório
 ------|------|-----------|------------
-id | UUID | Identificador do POI | Sim
+id | String(UUID) | Identificador do POI | Sim
 
 #### Exemplo
 #### Requisição
