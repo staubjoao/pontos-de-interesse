@@ -1,78 +1,79 @@
-# Pontos de Interesse por GPS
+# GPS Points of Interest
 
-Solução do desafio [pontos de interesse por GPS](https://github.com/backend-br/desafios/tree/master/03-Hard/PontosDeInteressePorGPS) da backend-br
+Solution for the [GPS Points of Interest](https://github.com/backend-br/desafios/tree/master/03-Hard/PontosDeInteressePorGPS) challenge by backend-br.
 
 ## Stack
 - Java
-- Spring boot
-- MySQL ou H2 database
+- Spring Boot
+- PostgreSQL
 
-## Problema
-A XY Inc. é uma empresa especializada na produção de excelentes receptores GPS (Global Positioning System).
-A diretoria está empenhada em lançar um dispositivo inovador que promete auxiliar pessoas na localização de pontos de interesse (POIs), e precisa muito de sua ajuda.
-Você foi contratado para desenvolver a plataforma que fornecerá toda a inteligência ao dispositivo! Esta plataforma deve ser baseada em serviços REST, de forma a flexibilizar a integração.
+## Problem
+XY Inc. is a company specialized in manufacturing excellent GPS (Global Positioning System) receivers.
+The board is committed to launching an innovative device that promises to help people locate points of interest (POIs) and needs your help.
 
-1. Construa um serviço para cadastrar pontos de interesse, com 3 atributos: Nome do POI, coordenada X (inteiro não negativo) e coordenada Y (inteiro não negativo). Os POIs devem ser armazenados em uma base de dados.
+You have been hired to develop the platform that will provide all the intelligence to the device! This platform must be based on REST services to facilitate integration.
 
-2. Construa um serviço para listar todos os POIs cadastrados.
+1. Develop a service to register points of interest with three attributes: POI name, X coordinate (non-negative integer), and Y coordinate (non-negative integer). The POIs must be stored in a database.
 
-3. Construa um serviço para listar POIs por proximidade. Este serviço receberá uma coordenada X e uma coordenada Y, especificando um ponto de referência, bem como uma distância máxima (d-max) em metros. O serviço deverá retornar todos os POIs da base de dados que estejam a uma distância menor ou igual a d-max a partir do ponto de referência.
+2. Develop a service to list all registered POIs.
 
-### Exemplo de Base de Dados:
+3. Develop a service to list POIs by proximity. This service will receive an X and a Y coordinate specifying a reference point, as well as a maximum distance (d-max) in meters. The service should return all POIs from the database that are at a distance less than or equal to d-max from the reference point.
 
-- 'Lanchonete' (x=27, y=12)
-- 'Posto' (x=31, y=18)
-- 'Joalheria' (x=15, y=12)
-- 'Floricultura' (x=19, y=21)
+### Example Database:
+
+- 'Diner' (x=27, y=12)
+- 'Gas Station' (x=31, y=18)
+- 'Jewelry Store' (x=15, y=12)
+- 'Flower Shop' (x=19, y=21)
 - 'Pub' (x=12, y=8)
-- 'Supermercado' (x=23, y=6)
-- 'Churrascaria' (x=28, y=2)
+- 'Supermarket' (x=23, y=6)
+- 'Steakhouse' (x=28, y=2)
 
+### Example Usage:
+Given the reference point (x=20, y=10) indicated by the GPS receiver and a maximum distance of 10 meters, the service should return the following POIs:
 
-### Exemplo de Uso:
-Dado o ponto de referência (x=20, y=10) indicado pelo receptor GPS, e uma distância máxima de 10 metros, o serviço deve retornar os seguintes POIs:
+- Diner
+- Jewelry Store
+- Pub
+- Supermarket
 
- - Lanchonete
- - Joalheria
- - Pub
- - Supermercado
- 
 ## Endpoints
 
-### Cadastrar POI
-Para cadastrar um ponto de interesse
-**[POST]|** localhost:8080/ponto
-No body da requisição
-Campo | Tipo | Descrição | Obrigatório
-------|------|-----------|------------
-name  |String|Nome do POI| Sim
-x | int | Coordenada x do POI, não negativo | Sim
-y | int | Coordenada y do POI, não negativo | Sim
+### Register POI
+To register a point of interest
+**[POST]** localhost:8080/ponto
 
-#### Exemplo
-#### Requisição
+Request body:
+
+Field | Type | Description | Required
+------|------|-----------|------------
+name  |String|POI Name| Yes
+x | int | POI X coordinate, non-negative | Yes
+y | int | POI Y coordinate, non-negative | Yes
+
+#### Example
+#### Request
 **[POST]** localhost:8080/ponto
 ```
 {
-    "descricao": "Lanchonete",
+    "descricao": "Diner",
     "x": 27,
     "y": 12
 }
 ```
-#### Resposta
+#### Response
 201 Created
 
-
-### Listar todos os POI
-#### Requisição
+### List all POIs
+#### Request
 **[GET]** localhost:8080/ponto
-#### Resposta
+#### Response
 200 OK
 ```
 [
     {
         "id": "a9074aa9-cc2e-4dd3-992b-a11df154a34e",
-        "descricao": "Lanchonete",
+        "descricao": "Diner",
         "x": 27,
         "y": 12
     },
@@ -80,26 +81,27 @@ y | int | Coordenada y do POI, não negativo | Sim
 ]
 ```
 
-### Listar um POI, por ID
-#### Requisição
-**[GET]** localhost:8080/ponto
+### Get a POI by ID
+#### Request
+**[GET]** localhost:8080/ponto/{id}
 
-#### Parâmetros
-Parâmetro | Tipo | Descrição | Obrigatório
+#### Parameters
+
+Parameter | Type | Description | Required
 ------|------|-----------|------------
-id | String(UUID) | Identificador do POI | Sim
+id | String(UUID) | POI Identifier | Yes
 
-#### Exemplo
-#### Requisição
+#### Example
+#### Request
 **[GET]** localhost:8080/ponto/a9074aa9-cc2e-4dd3-992b-a11df154a34e
 
-#### Resposta
+#### Response
 200 OK
 ```
 {
     "data": {
         "id": "a9074aa9-cc2e-4dd3-992b-a11df154a34e",
-        "descricao": "Lanchonete",
+        "descricao": "Diner",
         "x": 27,
         "y": 12
     },
@@ -107,26 +109,27 @@ id | String(UUID) | Identificador do POI | Sim
 }
 ```
 
-### Excluir um POI, por ID
-#### Requisição
-**[DELETE]** localhost:8080/ponto
+### Delete a POI by ID
+#### Request
+**[DELETE]** localhost:8080/ponto/{id}
 
-#### Parâmetros
-Parâmetro | Tipo | Descrição | Obrigatório
+#### Parameters
+
+Parameter | Type | Description | Required
 ------|------|-----------|------------
-id | String(UUID) | Identificador do POI | Sim
+id | String(UUID) | POI Identifier | Yes
 
-#### Exemplo
-#### Requisição
+#### Example
+#### Request
 **[DELETE]** localhost:8080/ponto/a9074aa9-cc2e-4dd3-992b-a11df154a34e
 
-#### Resposta
+#### Response
 200 OK
 ```
 {
     "data": {
         "id": "a9074aa9-cc2e-4dd3-992b-a11df154a34e",
-        "descricao": "Lanchonete",
+        "descricao": "Diner",
         "x": 27,
         "y": 12
     },
@@ -134,32 +137,33 @@ id | String(UUID) | Identificador do POI | Sim
 }
 ```
 
-### Listar POI por proximidade
+### List POIs by Proximity
 **[GET]** localhost:8080/ponto/proximos
 
-#### Parâmetros
-Parâmetro | Tipo | Descrição | Obrigatório
-------|------|-----------|------------
-x | int | Coordenada x do ponto de referência | Sim
-y | int | Coordenada y do ponto de referência | Sim
-distancia | int | Distância máxima até o POI, não negativo | Sim
+#### Parameters
 
-#### Exemplo
-#### Requisição
+Parameter | Type | Description | Required
+------|------|-----------|------------
+x | int | Reference point X coordinate | Yes
+y | int | Reference point Y coordinate | Yes
+distancia | int | Maximum distance to POI, non-negative | Yes
+
+#### Example
+#### Request
 **[GET]** localhost:8080/ponto/proximos?x=20&y=10&dmax=10
-#### Resposta
+#### Response
 200 OK
 ```
 [
     {
         "id": "a9074aa9-cc2e-4dd3-992b-a11df154a34e",
-        "descricao": "Lanchonete",
+        "descricao": "Diner",
         "x": 27,
         "y": 12
     },
     {
         "id": "ff9cb7e8-06af-4530-bce8-51621583d9be",
-        "descricao": "Joalheria",
+        "descricao": "Jewelry Store",
         "x": 15,
         "y": 12
     },
@@ -171,7 +175,7 @@ distancia | int | Distância máxima até o POI, não negativo | Sim
     },
     {
         "id": "e44969a9-ee84-4eab-9d0c-a78737f357b5",
-        "descricao": "Supermercado",
+        "descricao": "Supermarket",
         "x": 23,
         "y": 6
     }
